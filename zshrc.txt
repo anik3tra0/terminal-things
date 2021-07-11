@@ -1,0 +1,53 @@
+alias ber="bundle exec rspec"
+
+
+export NVM_DIR="/Users/developer/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# For GNU grep
+export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
+export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
+
+
+# AWS completions
+aws-profiles() {
+    cat ~/.aws/credentials | grep '\[' | grep -v '#' | tr -d '[' | tr -d ']'
+  }
+
+set-aws-profile() {
+    local aws_profile=$1
+    set -x
+    export AWS_PROFILE=${aws_profile}
+    export AWS_DEFAULT_REGION=ap-south-1
+    export TF_VAR_region=$AWS_DEFAULT_REGION
+    set +x
+}
+
+# Alias ag over grep
+alias grep='ag -U -f'
+
+# Git delete local branches
+git-nuke() {
+  git branch | grep -v "master" | xargs git branch -D
+}
+
+# PS -EF GREP with Headers
+psg () { ps auxwww | egrep "$1|PID" | grep -v grep }
+
+# AWS Clear ENVS
+alias aws-unassume-role="unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN"
+
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/developer/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/developer/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/developer/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/developer/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Set TF Region
+export AWS_DEFAULT_REGION=ap-south-1
+export TF_VAR_region=$AWS_DEFAULT_REGION
+export PATH=$PATH:$GOPATH/bin
